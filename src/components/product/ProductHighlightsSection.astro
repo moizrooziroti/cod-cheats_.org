@@ -1,0 +1,69 @@
+---
+import type { ProductPage } from '../../data/products';
+import SectionHeader from '../SectionHeader.astro';
+import Icon from '../icons/Icon.astro';
+import { Button } from '@/components/starwind/button';
+import { DISPLAY_PRICE_LABEL, getProductPlans } from '../../data/productPricing';
+
+interface Props {
+  product: ProductPage;
+}
+
+const { product } = Astro.props;
+const plans = getProductPlans(product.slug);
+const buyRel = 'sponsored noopener';
+const buyTarget = '_blank';
+const allFeatures = [
+  ...new Set([...product.features, ...product.fullFeatures]),
+];
+---
+
+<section
+  class="border-b border-border bg-muted/20 py-12 md:py-16"
+  aria-labelledby="product-highlights-title"
+>
+  <div class="mx-auto max-w-6xl px-5">
+    <SectionHeader
+      eyebrow="Full module list"
+      title="Every feature on this offer"
+      desc={`Every module we list for Call of Duty ${product.name} on this page — match names on affiliate checkout before you play.`}
+      titleId="product-highlights-title"
+    />
+
+    <p class="mt-4 text-sm text-muted-foreground">
+      Plans from <strong class="text-foreground">{DISPLAY_PRICE_LABEL}/mo</strong> or lifetime on checkout.
+    </p>
+
+    <ul class="mt-8 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        allFeatures.map((feature) => (
+          <li class="flex items-start gap-2 rounded-xl border border-border/80 bg-background/60 px-3 py-2.5 text-sm text-muted-foreground">
+            <Icon name="check" size={14} class="mt-0.5 shrink-0 text-primary" />
+            <span>{feature}</span>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="product-detail__inline-row mt-8 flex flex-wrap items-center gap-3">
+      {plans.map((plan) => (
+        <Button
+          as="a"
+          href={product.buyUrl}
+          rel={buyRel}
+          target={buyTarget}
+          variant={plan.id === 'monthly' ? 'primary' : 'outline'}
+          size="sm"
+          class="rounded-full"
+        >
+          Buy {plan.label.toLowerCase()}
+          <Icon name="arrowRight" size={16} />
+        </Button>
+      ))}
+      <Button type="button" data-scroll-target="product-features" variant="ghost" size="sm" class="rounded-full">
+        Jump to detailed breakdown
+        <Icon name="chevronDown" size={16} />
+      </Button>
+    </div>
+  </div>
+</section>

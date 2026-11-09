@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://cod-cheats.org/sitemap.xml
+
+# RSS: https://cod-cheats.org/rss.xml
